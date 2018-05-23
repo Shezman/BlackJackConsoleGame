@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TwentyOne
+namespace Casino
 {
     public class Deck
     {   
@@ -36,7 +36,7 @@ namespace TwentyOne
 
                 while (Cards.Count > 0) //no longer have to preface card with deck
                 {
-                    int randomIndex = random.Next(0, Cards.Count);
+                    int randomIndex = random.Next(0, Cards.Count); //this may return the same number, but it doesn't matter as it has been removed
                     TempList.Add(Cards[randomIndex]);
                     Cards.RemoveAt(randomIndex);
                 }

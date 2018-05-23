@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TwentyOne
+namespace Casino.TwentyOne
 {
     public class TwentyOneRules
     {
@@ -30,7 +30,7 @@ namespace TwentyOne
             int aceCount = Hand.Count(x => x.Face == Face.Ace); //each item on hand we are going to check if the card's face is equivalent to an ace. It will then return a count
             int[] result = new int[aceCount + 1]; //here we create an array named result. Within an array, you have to define how big it will be. In this case we define it as the count of aces + another card
             int value = Hand.Sum(x => _cardValues[x.Face]); //it looks at each item in the hand, and checks it fron the _cardValues dictionary get the face value and sums it up
-            result[0] = value;//this was where i = 0, which is why we start i= 1 later!
+            result[0] = value;
             if (result.Length == 1) //if there are no aces, then there can only be one possible value
             {
                 return result;
@@ -73,7 +73,7 @@ namespace TwentyOne
         public static bool? CompareHands(List<Card> PlayerHand, List<Card> DealerHand) //Now we have to build scenerios in which neither the player nor the dealer bust and both have chosen to stay. In this case you have 3 scenerios. Booleans are structs, meaning they are value types and cannot be null. Therefore, you can only have to options with them...(True or false). In this case we make use of a feature in the .Net Framework that allows a boolean to have a null value, and thus have 3 options!
         {
             int[] playerResults = GetAllPossibleHandValues(PlayerHand);
-            int[] dealerResults = GetAllPossibleHandValues(DealerHand);
+            int[] dealerResults = GetAllPossibleHandValues(DealerHand); //we place the possible values of 
 
             int playerScore = playerResults.Where(x => x < 22).Max(); //here we are saying for all player results, get me results that are less than 22, and find the max
             int dealerScore = dealerResults.Where(x => x < 22).Max();

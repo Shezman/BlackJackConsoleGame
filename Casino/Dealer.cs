@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
-namespace TwentyOne
+namespace Casino
 {
     public class Dealer
     {
@@ -15,7 +16,13 @@ namespace TwentyOne
         public void Deal (List<Card> Hand) //we are giving this dealer class the ability to deal. It takes an input parameter, a list of card named "hand"
         {
             Hand.Add(Deck.Cards.First()); //here we grab and add the first card to the hand that is passed into Deal()
-            Console.WriteLine(Deck.Cards.First().ToString() + "\n"); //print hand to console
+            string card = string.Format(Deck.Cards.First().ToString() + "\n");
+            Console.WriteLine(card); //print hand to console
+            using (StreamWriter file = new StreamWriter(@"C:\Users\sherm\source\repos\TwentyOne\TwentyOne\log.txt", true))
+            {
+                file.WriteLine(DateTime.Now);
+                file.WriteLine(card);
+            }//once the closing brace has been hit, that all the resources is disposed of due to the using statement
             Deck.Cards.RemoveAt(0); //remove the hand from the deck
         }
 

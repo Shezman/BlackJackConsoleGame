@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TwentyOne
+namespace Casino
 {
     public class Player
     {
+        public Player(string name) : this(name,100)
+        {
+        }
         public Player (string name, int beginningBalance) //this is a constructor that goes on top of the class
         {
             Hand = new List<Card>();
@@ -21,10 +24,10 @@ namespace TwentyOne
         public string Name { get; set; }
         public bool IsActivelyPlaying { get; set; }
         public bool Stay { get; set; }  //might be better to create a twentyonegame player that inherits player and have a specific property "Stay".
-
+        public Guid Id { get; set; }
         public bool Bet(int amount) //here we place a bet method within the player class, because we want to avoid having unrelated methods/logic in dfferent classes. The player is doing the logic so we should keep that logic to that entity
         {
-            if (Balance - amount < 0)
+            if (Balance - amount < 0) //the boolen "Bet" tests to see if the user has enough in its balance to make the bet
             {
                 Console.WriteLine("You do not have enough to place a bet that size.");
                 return false; //means the bet didnt work.

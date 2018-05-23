@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Casino.Interfaces;
 
-namespace TwentyOne
+namespace Casino.TwentyOne
 {
     public class TwentyOneGame : Game, IWalkAway
     {
@@ -21,12 +22,22 @@ namespace TwentyOne
             Dealer.Stay = false; 
             Dealer.Deck = new Deck();//we want to create a new deck. If we didn't do a new deck then we would get a partial deck every round, so each round will end up having an affect on the next round.
             Dealer.Deck.Shuffle();
-            Console.WriteLine("Place your bet!");
 
-            foreach (Player player in Players) //puts user bet into variable container
+            foreach (Player player in Players) // Now we iterate through every player in the list Players for their bet
             {
-                int bet = Convert.ToInt32(Console.ReadLine());
-                bool successfullyBet = player.Bet(bet);
+                bool validAnswer = false;
+                int bet = 0;
+                while (!validAnswer)
+                {
+                    Console.WriteLine("Place your bet!");
+                    validAnswer = int.TryParse(Console.ReadLine(), out bet);
+                    if (!validAnswer) Console.WriteLine("Please enter digits only, no decimals.");
+                }
+                if (bet < 0)
+                {
+                    throw new FraudException("Security! Kick this person out.");
+                }
+                bool successfullyBet = player.Bet(bet); 
                 if (successfullyBet == false)
                 {
                     return; //what return does in void doesn't return anythin. We are just saying to end this method. It will go back to the while loop in the main program. If the user is actively playing still (true), then it will hit the PLay() method again and ask for a bet.
@@ -39,14 +50,14 @@ namespace TwentyOne
                 Console.WriteLine("Dealing...");
                 foreach (Player player in Players)
                 {
-                    Console.Write("{0}; ", player.Name); //Console.Write() is so that the next thing will not be on a new line (doesn't automatically press enter).
+                    Console.Write("{0}: ", player.Name); //Console.Write() is so that the next thing will not be on a new line (doesn't automatically press enter).
                     Dealer.Deal(player.Hand); //the method Deal from the class Dealer, is taking in the player's Hand as a parameter.
-                    if (i == 1)
+                    if (i == 1) //asking if it is the second round
                     {
                         bool blackJack = TwentyOneRules.CheckForBlackJack(player.Hand); //we create a boolean for CheckForBlackJack method
                         if (blackJack)//if the boolean is true essentially
                         {
-                            Console.WriteLine("Blackjack! {0} wins {1}", player.Name, Bets[player]);
+                            Console.WriteLine("Blackjack! {0} wins {1}", player.Name, Bets[player]);//return the value from the Dictionary Bets
                             player.Balance = player.Balance + Convert.ToInt32((Bets[player] * 1.5) + Bets[player]); //Bets[player] is a dictionary property from Game class that takes in player as a parameter
                             return;
                         }
@@ -72,7 +83,7 @@ namespace TwentyOne
             {
                 while (!player.Stay) // same as player.Stay == false???
                 {
-                    Console.WriteLine("Youe cards are: ");
+                    Console.WriteLine("Your cards are: ");
                     foreach (Card card in player.Hand)
                     {
                         Console.Write("{0} ", card.ToString());
@@ -133,7 +144,7 @@ namespace TwentyOne
                 }
                 return;
             }
-            foreach (Player player in Players) //Now we have to build scenerios in which neither the player nor the dealer bust and both have chosen to stay. In this case you have 3 scenerios. Booleans are structs, meaning they are value types and cannot be null. Therefore, you can only have to options with them...(True or false). In this case we make use of a feature in the .Net Framework that allows a boolean to have a null value, and thus have 3 options!
+            foreach (Player player in Players) //Now we have to build scenerios in which neither the player nor the dealer bust and both have chosen to stay. In this case you have 3 scenerios. Booleans are structs, meaning they are value types and cannot be null. Therefore, you can only have two options with them...(True or false). In this case we make use of a feature in the .Net Framework that allows a boolean to have a null value, and thus have 3 options!
 
             {
                 bool? playerWon = TwentyOneRules.CompareHands(player.Hand, Dealer.Hand);
